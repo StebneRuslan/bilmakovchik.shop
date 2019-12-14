@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const uuid = require('uuid')
+const mongooseBcrypt = require('mongoose-bcrypt')
+
 const { ROLE_APP_USER, ROLE_SUPER_ADMIN } = require('../config/user.roles')
 
 mongoose.Promise = global.Promise
@@ -50,14 +52,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true,
     required: false
-  },
-  avatar: {
-    type: String,
-    ref: 'Image',
-    required: false
   }
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
-const Cut = mongoose.model('User', userSchema)
+userSchema.plugin(mongooseBcrypt)
 
-module.exports = Cut
+const User = mongoose.model('User', userSchema)
+module.exports = User

@@ -1,3 +1,5 @@
+const User = require('../models/users')
+
 function getUser () {
   console.log('getUser')
 }
@@ -6,8 +8,13 @@ function getAllUsers () {
   console.log('getAllUsers')
 }
 
-function createUser () {
-  console.log('createUser')
+function createUser (userConfig) {
+  return new Promise((resolve, reject) => {
+    const user = new User(userConfig)
+    user.save()
+      .then(() => resolve(user))
+      .catch(err => reject(err))
+  })
 }
 
 function updateUser () {

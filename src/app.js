@@ -1,7 +1,9 @@
 const express = require('express')
 const { mongoDB } = require('./models/index')
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 const createError = require('http-errors')
+const { validateError } = require('./validators/validate-error-handler')
 
 const apiV1 = require('./api-routes/api.v1')
 
@@ -11,6 +13,7 @@ mongoDB.connection.on('connected', () => {
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
+  app.use(bodyParser.json())
   const config = require('./config/server')
 
   app.use('/api/v1', apiV1)
@@ -24,6 +27,7 @@ mongoDB.connection.on('connected', () => {
     res.status(err.status || 500)
   })
 
+  app.use(validateError)
   app.listen(process.env.PORT || config.PORT, () => {
     console.log('***********************************************')
     console.log('***********************************************')
