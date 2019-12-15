@@ -4,8 +4,9 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const createError = require('http-errors')
 const { validateError } = require('./validators/validate-error-handler')
+const passport = require('passport')
 
-const apiV1 = require('./api-routes/api.v1')
+const apiV1 = require('./api-routes/api-v1')
 
 mongoDB.connection.on('connected', () => {
   const app = express()
@@ -14,6 +15,7 @@ mongoDB.connection.on('connected', () => {
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
   app.use(bodyParser.json())
+  app.use(passport.initialize())
   const config = require('./config/server')
 
   app.use('/api/v1', apiV1)

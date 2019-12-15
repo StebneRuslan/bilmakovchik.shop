@@ -2,18 +2,13 @@ const mongoose = require('mongoose')
 const uuid = require('uuid')
 const mongooseBcrypt = require('mongoose-bcrypt')
 
-const { ROLE_APP_USER, ROLE_SUPER_ADMIN } = require('../config/user.roles')
+const { ROLE_APP_USER, ROLE_SUPER_ADMIN } = require('../config/user-roles')
 
 mongoose.Promise = global.Promise
 
 const roles = [ROLE_SUPER_ADMIN, ROLE_APP_USER]
 
 const userSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    default: uuid.v4,
-    unique: true
-  },
   firstName: {
     type: String,
     minLength: 3,
@@ -27,6 +22,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     minLength: 8,
+    unique: true,
     required: true
   },
   password: {

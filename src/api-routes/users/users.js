@@ -2,20 +2,43 @@ const express = require('express')
 const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
-const { create } = require('./validator')
+const { create, update } = require('./validator')
 const createError = require('http-errors')
 
 const {
   createUser,
-  getUser
+  getUser,
+  getAllUsers,
+  updateUser,
+  deleteUser
 } = require('../../services/users')
 
 router.get('/users/:userId', authentificate, (req, res, next) => {
-  console.log(req.body.user)
+  getUser(req.user)
+    .then(data => res.status(200).send(data))
+    .catch(err => next(createError(400, err.message)))
+})
+
+router.get('/users', authentificate, (req, res, next) => {
+  getAllUsers()
+    .then(data => res.status(200).send(data))
+    .catch(err => next(createError(400, err.message)))
 })
 
 router.post('/users', validate(create), (req, res, next) => {
   createUser(req.body.user)
+    .then(data => res.status(200).send(data))
+    .catch(err => next(createError(400, err.message)))
+})
+
+router.put('/users/:userId', authentificate, validate(update), (req, res, next) => {
+  updateUser(req.body.user, req.params.userId)
+    .then(data => res.status(200).send(data))
+    .catch(err => next(createError(400, err.message)))
+})
+
+router.delete('/users/:userId', authentificate, (req, res, next) => {
+  deleteUser(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })

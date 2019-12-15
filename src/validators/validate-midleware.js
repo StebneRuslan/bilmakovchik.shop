@@ -1,8 +1,6 @@
-const createError = require('http-errors')
-
-class InvalidRequestError extends Error {
-  constructor (errors, status = 400, msg = 'Invalid data') {
-    super(msg)
+class ValidationError extends Error {
+  constructor (errors, status = 400, message = 'Invalid data') {
+    super(message)
     this.status = status
     this.errors = errors
     this.name = 'ValidationError'
@@ -11,7 +9,7 @@ class InvalidRequestError extends Error {
 
 const validate = (validator) => (req, res, next) => {
   if (!validator(req.body)) {
-    return next(new InvalidRequestError(validator.errors))
+    return next(new ValidationError(validator.errors))
   }
   next()
 }
