@@ -3,6 +3,7 @@ const dbConfig = require('../config/mongo')
 mongoose.connect(`${dbConfig.URI}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
+  useFindAndModify: false,
   useUnifiedTopology: true
 })
 

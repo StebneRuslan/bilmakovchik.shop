@@ -1,3 +1,4 @@
+//
 const express = require('express')
 const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
@@ -25,7 +26,7 @@ router.get('/users', authentificate, (req, res, next) => {
     .catch(err => next(createError(400, err.message)))
 })
 
-router.post('/users', validate(create), (req, res, next) => {
+router.post('/users', authentificate, validate(create), (req, res, next) => {
   createUser(req.body.user)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
