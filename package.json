@@ -28,5 +28,10 @@
     "passport-custom": "^1.1.0",
     "standard": "^14.3.1",
     "uuid": "^3.3.3"
+  },
+  "standard": {
+    "ignore": [
+      "/src/public/"
+    ]
   }
 }
