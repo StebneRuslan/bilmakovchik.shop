@@ -5,12 +5,14 @@ const bodyParser = require('body-parser')
 const createError = require('http-errors')
 const { validateError } = require('./validators/validate-error-handler')
 const passport = require('passport')
+const compression = require('compression')
 
 const apiV1 = require('./api-routes/api-v1')
 
 mongoDB.connection.on('connected', () => {
   const app = express()
 
+  app.use(compression())
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
