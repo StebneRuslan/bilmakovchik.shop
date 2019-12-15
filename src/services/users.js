@@ -1,7 +1,8 @@
 const User = require('../models/users')
 const pick = require('lodash/pick')
-const adminFields = ['firstName', 'lastName', 'email', 'role']
+const adminFields = ['_id', 'firstName', 'lastName', 'email', 'role']
 
+// get user by id
 function getUser (id) {
   return new Promise((resolve, reject) => {
     User.findById(id)
@@ -10,6 +11,7 @@ function getUser (id) {
   })
 }
 
+// get array of all users
 function getAllUsers () {
   return new Promise((resolve, reject) => {
     User.find({})
@@ -18,15 +20,17 @@ function getAllUsers () {
   })
 }
 
+// create user by body config
 function createUser (userConfig) {
   return new Promise((resolve, reject) => {
     const user = new User(userConfig)
     user.save()
-      .then(() => resolve(user))
+      .then(() => resolve(pick(user, adminFields)))
       .catch(err => reject(err))
   })
 }
 
+// update user by body config
 function updateUser (userConfig, userId) {
   return new Promise((resolve, reject) => {
     User.findOneAndUpdate({ _id: userId }, userConfig)
@@ -39,6 +43,7 @@ function updateUser (userConfig, userId) {
   })
 }
 
+// delete user by ID
 function deleteUser (userId) {
   return new Promise((resolve, reject) => {
     User.findOneAndRemove({ _id: userId })

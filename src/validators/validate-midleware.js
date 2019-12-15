@@ -1,3 +1,4 @@
+// create ajv error
 class ValidationError extends Error {
   constructor (errors, status = 400, message = 'Invalid data') {
     super(message)

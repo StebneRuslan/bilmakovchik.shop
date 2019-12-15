@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const { mongoDB } = require('./models/index')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
@@ -8,10 +9,12 @@ const passport = require('passport')
 const compression = require('compression')
 
 const apiV1 = require('./api-routes/api-v1')
+const adminRoutes = require('./routes/admin-routes')
 
 mongoDB.connection.on('connected', () => {
   const app = express()
 
+  app.use('/assets/', express.static(path.resolve(__dirname, 'public', 'admin', 'dist', 'admin')))
   app.use(compression())
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
@@ -20,11 +23,10 @@ mongoDB.connection.on('connected', () => {
   app.use(passport.initialize())
   const config = require('./config/server')
 
+  app.use('/', adminRoutes)
   app.use('/api/v1', apiV1)
 
-  app.use((req, res, next) => {
-    next(createError(404))
-  })
+  app.use((req, res, next) => next(createError(404)))
   app.use((err, req, res) => {
     res.locals.message = err.message
     res.locals.error = req.app.get('env') === 'development' ? err : {}

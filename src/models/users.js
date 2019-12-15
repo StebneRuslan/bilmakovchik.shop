@@ -5,7 +5,7 @@ const mongooseBcrypt = require('mongoose-bcrypt')
 const { ROLE_APP_USER, ROLE_SUPER_ADMIN } = require('../config/user-roles')
 
 mongoose.Promise = global.Promise
-
+// separate users by role
 const roles = [ROLE_SUPER_ADMIN, ROLE_APP_USER]
 
 const userSchema = new mongoose.Schema({
@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
+// crypt user password
 userSchema.plugin(mongooseBcrypt)
 
 const User = mongoose.model('User', userSchema)

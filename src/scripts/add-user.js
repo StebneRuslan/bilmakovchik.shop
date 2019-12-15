@@ -31,6 +31,7 @@ const userInquirerConstructor = [
   }
 ]
 
+// create first user to db
 mongoose.connect(`${dbConfig.URI}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
