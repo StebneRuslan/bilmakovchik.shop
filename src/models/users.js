@@ -42,12 +42,6 @@ const userSchema = new mongoose.Schema({
     enum: { values: roles },
     required: true,
     default: ROLE_APP_USER
-  },
-  phone: {
-    type: String,
-    unique: true,
-    sparse: true,
-    required: false
   }
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 

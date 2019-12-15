@@ -1,6 +1,6 @@
 const User = require('../models/users')
 const pick = require('lodash/pick')
-const adminFields = ['firstName', 'lastName', 'email', 'role', 'phone']
+const adminFields = ['firstName', 'lastName', 'email', 'role']
 
 function getUser (id) {
   return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ function createUser (userConfig) {
 
 function updateUser (userConfig, userId) {
   return new Promise((resolve, reject) => {
-    User.findByIdAndUpdate(userId, userConfig)
+    User.findOneAndUpdate({ _id: userId }, userConfig)
       .then(() => {
         User.findById(userId)
           .then(user => resolve(user))
@@ -41,8 +41,8 @@ function updateUser (userConfig, userId) {
 
 function deleteUser (userId) {
   return new Promise((resolve, reject) => {
-    User.findByIdAndDelete(userId)
-      .then(user => resolve(user))
+    User.findOneAndRemove({ _id: userId })
+      .then(user => resolve({ message: `User ${user._id} was successfully deleted` }))
       .catch(err => reject(err))
   })
 }
