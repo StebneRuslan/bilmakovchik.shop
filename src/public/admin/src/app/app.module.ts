@@ -19,6 +19,10 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from '@angular/material';
+import { LoginComponent } from './components/login/login.component';
+
+import { CookieService } from 'ngx-cookie-service';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -26,25 +30,29 @@ import { MatInputModule } from '@angular/material';
     NavBarComponent,
     ContainerComponent,
     UsersComponent,
-    CreateUserModalComponent
+    CreateUserModalComponent,
+    LoginComponent
   ],
-	imports: [
-		BrowserModule,
-		AppRoutingModule,
-		BrowserAnimationsModule,
-		MatToolbarModule,
-		MatIconModule,
-		MatPaginatorModule,
-		MatTableModule,
-		HttpClientModule,
-		MatButtonModule,
-		MatDialogModule,
-		MatFormFieldModule,
-		ReactiveFormsModule,
-		MatSelectModule,
-		MatInputModule
-	],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatTableModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatInputModule,
+    MatCardModule
+  ],
+  providers: [
+    CookieService
+  ],
 	entryComponents: [
 		CreateUserModalComponent
 	],
