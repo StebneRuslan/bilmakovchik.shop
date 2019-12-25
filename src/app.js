@@ -14,7 +14,7 @@ const adminRoutes = require('./routes/admin-routes')
 mongoDB.connection.on('connected', () => {
   const app = express()
 
-  app.use('/assets/', express.static(path.resolve(__dirname, 'public', 'admin', 'dist', 'admin')))
+  app.use('/assets/', express.static(path.resolve(__dirname, '..', 'admin', 'dist', 'admin')))
   app.use(compression())
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))

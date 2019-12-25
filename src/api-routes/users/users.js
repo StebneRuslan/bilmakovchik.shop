@@ -19,31 +19,31 @@ router.post('/users/login', authentificate.local, (req, res, next) => {
     .catch(err => next(createError(400, err.message)))
 })
 
-router.get('/users/:userId', (req, res, next) => {
+router.get('/users/:userId', authentificate.apiKey, (req, res, next) => {
   getUser(req.user)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.get('/users', (req, res, next) => {
+router.get('/users', authentificate.apiKey, (req, res, next) => {
   getAllUsers()
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.post('/users', validate(create), (req, res, next) => {
+router.post('/users', authentificate.apiKey, validate(create), (req, res, next) => {
   createUser(req.body.user)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.put('/users/:userId', validate(update), (req, res, next) => {
+router.put('/users/:userId', authentificate.apiKey, validate(update), (req, res, next) => {
   updateUser(req.body.user, req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.delete('/users/:userId', (req, res, next) => {
+router.delete('/users/:userId', authentificate.apiKey, (req, res, next) => {
   deleteUser(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))

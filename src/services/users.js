@@ -1,13 +1,14 @@
 const User = require('../models/users')
 const pick = require('lodash/pick')
 const adminFields = ['_id', 'firstName', 'lastName', 'email', 'role']
-const privateFields = ['_id', 'apiKey', 'firstName', 'lastName', 'email', 'role', 'apiKey']
+const loginFields = ['apiKey', 'firstName', 'lastName', 'email', 'role']
+const privateFields = ['_id', 'apiKey', 'firstName', 'lastName', 'email', 'role']
 
 // get user by id
 function getUser (id, login = false) {
   return new Promise((resolve, reject) => {
     User.findById(id)
-      .then(user => resolve(pick(user, login ? privateFields : adminFields)))
+      .then(user => resolve(pick(user, login ? loginFields : adminFields)))
       .catch(err => reject(err))
   })
 }
@@ -52,15 +53,6 @@ function deleteUser (userId) {
       .catch(err => reject(err))
   })
 }
-
-// login user
-// function login (id) {
-//   return new Promise((resolve, reject) => {
-//     User.findById(id)
-//       .then(user => resolve(pick(user, adminFields)))
-//       .catch(err => reject(err))
-//   })
-// }
 
 module.exports.getUser = getUser
 module.exports.getAllUsers = getAllUsers

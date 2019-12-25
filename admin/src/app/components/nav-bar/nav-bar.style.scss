@@ -1,0 +1,11 @@
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  .nav-item {
+    display: flex;
+  }
+  .logout {
+    margin-left: auto;
+  }
+}

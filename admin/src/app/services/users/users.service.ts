@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { User } from '../../entities/user';
 import { LoginModel } from '../../components/login/login.model';
 
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -37,6 +37,10 @@ export class UsersService {
 
   public logIn(user: LoginModel): Observable<any> {
     return this.http.post(`${this.uri}/users/login`, user);
+  }
+
+  public logOut(): Observable<any> {
+    return of(this.setApiKey(''));
   }
 
   public getApiKey(): string {
