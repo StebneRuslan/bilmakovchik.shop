@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
       this.usersService.getOneUser(id).subscribe((user: User) => {
         this.form.formGroup.patchValue(user);
         this.selectedUserId = id;
-      })
+      });
       this.activeUser = this.usersService.getActiveUser();
     });
   }

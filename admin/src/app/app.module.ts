@@ -25,6 +25,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationInterceptor } from "./interceptors/auth.interceptor";
 import { UserComponent } from './components/users/user/user.component';
+import { GraphicComponent } from './components/graphic/graphic.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { UserComponent } from './components/users/user/user.component';
     UsersComponent,
     LoginComponent,
     RegistrationComponent,
-    UserComponent
+    UserComponent,
+    GraphicComponent
   ],
   imports: [
     BrowserModule,
