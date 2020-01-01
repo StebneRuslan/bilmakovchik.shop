@@ -5,6 +5,7 @@ import { AuthenticationGuard } from "./guards/auth.guard";
 import { ContainerComponent } from './components/container/container.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { UserComponent } from "./components/users/user/user.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'registration',
     component: RegistrationComponent
+  },
+  {
+    path: 'user/:id',
+    component: UserComponent
   }
 ];
 

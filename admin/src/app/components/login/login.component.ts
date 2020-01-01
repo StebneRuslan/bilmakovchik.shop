@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
   public logIn(): void {
     this.usersService.logIn(this.form.formGroup.value)
       .subscribe((user: User) => {
-        this.usersService.setApiKey(user.apiKey);
+        debugger;
+        this.usersService.saveActiveUser(user);
         this.router.navigate(['/dashboard'])
       }, error => {
         this.error = error.message;

@@ -11,7 +11,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler) : Observable<HttpEvent<any>> {
     if (!request.url.includes('login') && !request.url.includes('registration')) {
       request = request.clone({
-        headers: request.headers.set('x-api-key', this.userService.getApiKey())
+        headers: request.headers.set('x-api-key', this.userService.getActiveUser(['apiKey']).apiKey)
       });
     }
     return next.handle(request);

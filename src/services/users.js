@@ -1,14 +1,13 @@
 const User = require('../models/users')
 const pick = require('lodash/pick')
 const adminFields = ['_id', 'firstName', 'lastName', 'email', 'role']
-const loginFields = ['apiKey', 'firstName', 'lastName', 'email', 'role']
 const privateFields = ['_id', 'apiKey', 'firstName', 'lastName', 'email', 'role']
 
 // get user by id
 function getUser (id, login = false) {
   return new Promise((resolve, reject) => {
     User.findById(id)
-      .then(user => resolve(pick(user, login ? loginFields : adminFields)))
+      .then(user => resolve(pick(user, login ? privateFields : adminFields)))
       .catch(err => reject(err))
   })
 }
@@ -38,7 +37,7 @@ function updateUser (userConfig, userId) {
     User.findOneAndUpdate({ _id: userId }, userConfig)
       .then(() => {
         User.findById(userId)
-          .then(user => resolve(user))
+          .then(user => resolve(pick(user, privateFields)))
           .catch(err => reject(err))
       })
       .catch(err => reject(err))

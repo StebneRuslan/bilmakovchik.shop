@@ -20,7 +20,7 @@ router.post('/users/login', authentificate.local, (req, res, next) => {
 })
 
 router.get('/users/:userId', authentificate.apiKey, (req, res, next) => {
-  getUser(req.user)
+  getUser(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })

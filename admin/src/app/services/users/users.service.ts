@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+// TODO import only pick
+import * as _ from 'lodash';
 
 import { User } from '../../entities/user';
 import { LoginModel } from '../../components/login/login.model';
@@ -18,9 +20,12 @@ export class UsersService {
     private cookieService: CookieService
   ) { }
 
-  // TODO create interceptor
   public getUsers(): Observable<any> {
     return this.http.get(`${this.uri}/users`);
+  }
+
+  public getOneUser(id: string): Observable<any> {
+    return this.http.get(`${this.uri}/users/${id}`);
   }
 
   public deleteUsers(id): Observable<any> {
@@ -40,14 +45,14 @@ export class UsersService {
   }
 
   public logOut(): Observable<any> {
-    return of(this.setApiKey(''));
+    return of(this.cookieService.delete('user'));
   }
 
-  public getApiKey(): string {
-    return this.cookieService.get('api-key');
+  public getActiveUser(fields?: string[]): User {
+    return fields ? _.pick(JSON.parse(this.cookieService.get('user')), fields) : JSON.parse(this.cookieService.get('user'));
   }
 
-  public setApiKey(token: string): void {
-    this.cookieService.set('api-key', token);
+  public saveActiveUser(user: User): void {
+    this.cookieService.set('user', JSON.stringify(user));
   }
 }

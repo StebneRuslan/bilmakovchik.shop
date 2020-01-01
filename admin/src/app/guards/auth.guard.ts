@@ -14,7 +14,7 @@ export class AuthenticationGuard implements CanActivate {
   ) {}
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (!this.usersService.getApiKey()) {
+    if (!this.usersService.getActiveUser(['apiKey']).apiKey) {
       this.router.navigate(['/login']);
       return false;
     }
