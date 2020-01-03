@@ -2,6 +2,7 @@ const CustomStrategy = require('passport-custom')
 const LocalStrategy = require('passport-local')
 const passport = require('passport')
 const User = require('../models/users')
+const createError = require('http-errors')
 
 // authenticate middleware for each request
 passport.use('api-key',
@@ -25,7 +26,7 @@ passport.use('local', new LocalStrategy({ usernameField: 'email', passwordField:
           return
         }
         if (!valid) {
-          done(null, false)
+          done(createError(401, 'Invalid email or password'), false)
           return
         }
         done(null, user)

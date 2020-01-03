@@ -10,7 +10,7 @@ const validateError = (error, req, res, next) => {
       return res.status(400).send(error.message)
     }
   }
-  next(error)
+  return res.status(error.status).send(error)
 }
 
 module.exports.validateError = validateError
