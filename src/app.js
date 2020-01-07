@@ -1,5 +1,6 @@
 const express = require('express')
 const path = require('path')
+require('dotenv').config()
 const { mongoDB } = require('./models/index')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')

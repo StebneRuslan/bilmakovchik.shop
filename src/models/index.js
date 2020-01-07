@@ -4,10 +4,10 @@ const mongoose = require('mongoose')
 const dbConfig = require('../config/mongo')
 
 mongoose.connect(`${dbConfig.URI}`, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
+  useNewUrlParser: dbConfig.useNewUrlParser,
+  useCreateIndex: dbConfig.useCreateIndex,
+  useFindAndModify: dbConfig.useFindAndModify,
+  useUnifiedTopology: dbConfig.useUnifiedTopology
 })
 
 module.exports.mongoDB = mongoose
