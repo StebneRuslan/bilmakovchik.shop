@@ -9,6 +9,7 @@ import { LoginModel } from '../../components/login/login.model';
 
 import { Observable, of } from "rxjs";
 import { CookieService } from 'ngx-cookie-service';
+import {FileInput} from "ngx-material-file-input";
 
 @Injectable({
   providedIn: 'root'
@@ -54,5 +55,9 @@ export class UsersService {
 
   public saveActiveUser(user: User): void {
     this.cookieService.set('user', JSON.stringify(user));
+  }
+
+  public uploadAvatar(userId:  string, file: FileInput): Observable<any> {
+    return this.http.post(`${this.uri}/users/${userId}/avatar`, file);
   }
 }

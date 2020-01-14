@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from '@angular/material';
 import { MatCardModule } from "@angular/material/card";
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -53,7 +54,8 @@ import { GraphicComponent } from './components/graphic/graphic.component';
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
-    MatCardModule
+    MatCardModule,
+    MaterialFileInputModule
   ],
   providers: [
     CookieService,

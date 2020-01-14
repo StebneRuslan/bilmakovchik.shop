@@ -6,4 +6,5 @@ export class User {
 	public email: string = '';
 	public role: string = '';
 	public password: string = '';
+	public avatarUrl: string = '';
 }

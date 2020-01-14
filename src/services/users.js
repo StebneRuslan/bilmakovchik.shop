@@ -1,3 +1,4 @@
+const fs = require('fs')
 const User = require('../models/users')
 const pick = require('lodash/pick')
 const adminFields = ['_id', 'firstName', 'lastName', 'email', 'role']
@@ -53,8 +54,21 @@ function deleteUser (userId) {
   })
 }
 
+function saveAvatar (userId, buffer) {
+  console.log(userId, buffer)
+  return new Promise((resolve, reject) => {
+    fs.writeFile(`/avatars/${userId}.png`, buffer, (err, data) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(data)
+    })
+  })
+}
+
 module.exports.getUser = getUser
 module.exports.getAllUsers = getAllUsers
 module.exports.createUser = createUser
 module.exports.updateUser = updateUser
 module.exports.deleteUser = deleteUser
+module.exports.saveAvatar = saveAvatar

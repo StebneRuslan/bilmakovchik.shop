@@ -10,7 +10,8 @@ const {
   getUser,
   getAllUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  saveAvatar
 } = require('../../services/users')
 
 router.post('/users/login', authentificate.local, (req, res, next) => {
@@ -41,6 +42,16 @@ router.put('/users/:userId', authentificate.apiKey, validate(update), (req, res,
   updateUser(req.body.user, req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
+})
+
+router.post('/users/:userId/avatar', authentificate.apiKey, (req, res, next) => {
+  const chunks = []
+  req.on('data', (chunk) => chunks.push(chunk))
+  req.on('end', () => {
+    saveAvatar(req.params.userId, Buffer.concat(chunks))
+      .then(data => res.status(200).send(data))
+      .catch(err => next(createError(400, err.message)))
+  })
 })
 
 router.delete('/users/:userId', authentificate.apiKey, (req, res, next) => {

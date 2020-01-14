@@ -2,15 +2,26 @@
   <mat-card-header>
     <div class="user-container">
       <h1>Create account</h1>
+      <img [src]="avatarFile.file || form.formGroup.controls.avatarUrl.value || '/assets/assets/avatar.png'">
       <form class="user-form" (submit)="save()" [formGroup]="form.formGroup">
         <mat-form-field>
-          <input matInput placeholder="First Name" formControlName="firstName">
+          <ngx-mat-file-input formControlName="avatarUrl" placeholder="Required input" (change)="changeFile($event)" valuePlaceholder="No file selected" required></ngx-mat-file-input>
+          <mat-icon matSuffix>folder</mat-icon>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Last Name" formControlName="lastName">
+          <label>
+            <input matInput placeholder="First Name" formControlName="firstName">
+          </label>
         </mat-form-field>
         <mat-form-field>
-          <input matInput placeholder="Email" formControlName="email">
+          <label>
+            <input matInput placeholder="Last Name" formControlName="lastName">
+          </label>
+        </mat-form-field>
+        <mat-form-field>
+          <label>
+            <input matInput placeholder="Email" formControlName="email">
+          </label>
         </mat-form-field>
         <mat-form-field>
           <mat-select [disabled]="activeUser.role !== 'SUPER_ADMIN'" [ngModel]="form.formGroup.controls.role.value" placeholder="Role" formControlName="role">

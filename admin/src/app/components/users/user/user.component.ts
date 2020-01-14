@@ -18,12 +18,25 @@ export class UserComponent implements OnInit {
   private selectedUserId: string;
   private activeUser: User;
 
+  public avatarFile = {
+    name: '',
+    file: ''
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: UsersService,
     private router: Router
   ) {
     this.form = new UserForm(new User())
+  }
+
+  public changeFile(event: any): void {
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    this.avatarFile.name = event.target.files[0];
+    reader.onload = (_event) => {
+      this.avatarFile.file = reader.result.toString();
+    }
   }
 
   public ngOnInit(): void {
@@ -37,11 +50,21 @@ export class UserComponent implements OnInit {
   }
 
   public save(): void {
-    this.usersService.updateUser(this.selectedUserId, this.form.formGroup.value).subscribe((user: User) => {
-      if (user.email === this.usersService.getActiveUser(['email']).email) {
-        this.usersService.saveActiveUser(user);
-      }
-      this.router.navigate(['/dashboard'])
-    })
+    debugger;
+    if (this.form.formGroup.controls.avatarUrl.value) {
+      this.usersService.uploadAvatar(this.selectedUserId, this.form.formGroup.controls.avatarUrl.value.files[0]).subscribe(data => {
+        console.log(data);
+        delete this.form.formGroup.controls.avatarUrl;
+        debugger;
+        this.usersService.updateUser(this.selectedUserId, this.form.formGroup.value).subscribe((user: User) => {
+          if (user.email === this.usersService.getActiveUser(['email']).email) {
+            this.usersService.saveActiveUser(user);
+          }
+          this.router.navigate(['/dashboard'])
+        })
+      }, err => {
+        console.log(err);
+      });
+    }
   }
 }
