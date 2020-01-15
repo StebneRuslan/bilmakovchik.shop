@@ -1,0 +1,9 @@
+{
+  "lastRun": "1579119342793-add-user-avatar.js",
+  "migrations": [
+    {
+      "title": "1579119342793-add-user-avatar.js",
+      "timestamp": 1579120098970
+    }
+  ]
+}
