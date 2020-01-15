@@ -4,6 +4,7 @@ const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
 const { create, update } = require('./validator')
 const createError = require('http-errors')
+const FileType = require('file-type')
 
 const {
   createUser,
@@ -48,9 +49,12 @@ router.post('/users/:userId/avatar', authentificate.apiKey, (req, res, next) => 
   const chunks = []
   req.on('data', (chunk) => chunks.push(chunk))
   req.on('end', () => {
-    saveAvatar(req.params.userId, Buffer.concat(chunks))
-      .then(data => res.status(200).send(data))
-      .catch(err => next(createError(400, err.message)))
+    const fileBuffer = Buffer.concat(chunks)
+    FileType.fromBuffer(fileBuffer).then(file => {
+      saveAvatar(req.params.userId, fileBuffer, req.headers['x-file-name'], file.ext)
+        .then(data => res.status(200).send(data))
+        .catch(err => next(createError(400, err.message)))
+    })
   })
 })
 

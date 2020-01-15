@@ -1,14 +1,19 @@
 const fs = require('fs')
+const path = require('path')
 const User = require('../models/users')
+const File = require('../models/file')
 const pick = require('lodash/pick')
-const adminFields = ['_id', 'firstName', 'lastName', 'email', 'role']
-const privateFields = ['_id', 'apiKey', 'firstName', 'lastName', 'email', 'role']
+const adminFields = ['_id', 'firstName', 'avatar', 'lastName', 'email', 'role']
+const privateFields = ['_id', 'apiKey', 'avatar', 'firstName', 'lastName', 'email', 'role']
 
 // get user by id
 function getUser (id, login = false) {
   return new Promise((resolve, reject) => {
     User.findById(id)
-      .then(user => resolve(pick(user, login ? privateFields : adminFields)))
+      .populate('avatar')
+      .then(user => {
+        resolve(pick(user, login ? privateFields : adminFields))
+      })
       .catch(err => reject(err))
   })
 }
@@ -54,14 +59,23 @@ function deleteUser (userId) {
   })
 }
 
-function saveAvatar (userId, buffer) {
-  console.log(userId, buffer)
+function saveAvatar (userId, buffer, fileName, ext) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(`/avatars/${userId}.png`, buffer, (err, data) => {
+    const filePath = path.resolve(__dirname, `../public/avatars/${fileName}`)
+    fs.writeFile(filePath, buffer, (err) => {
       if (err) {
         return reject(err)
       }
-      return resolve(data)
+      new File({ name: fileName, path: `/public/avatars/${fileName}`, type: ext, user: userId })
+        .save()
+        .then(file => {
+          User.findOneAndUpdate({ _id: userId }, { avatar: file._id })
+            .then(() => {
+              return resolve(pick(file, ['name', 'path', 'type']))
+            })
+            .catch(err => reject(err))
+        })
+        .catch(err => reject(err))
     })
   })
 }

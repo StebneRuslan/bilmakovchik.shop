@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 // TODO import only pick
 import * as _ from 'lodash';
 
-import { User } from '../../entities/user';
+import { Avatar, User } from '../../entities/user';
 import { LoginModel } from '../../components/login/login.model';
 
 import { Observable, of } from "rxjs";
@@ -57,7 +57,12 @@ export class UsersService {
     this.cookieService.set('user', JSON.stringify(user));
   }
 
-  public uploadAvatar(userId:  string, file: FileInput): Observable<any> {
-    return this.http.post(`${this.uri}/users/${userId}/avatar`, file);
+  public uploadAvatar(userId:  string, file: string, avatarConfig: Avatar): Observable<any> {
+    return this.http.post(`${this.uri}/users/${userId}/avatar`, file, {
+      headers: {
+        'x-file-name': avatarConfig.name,
+        'Content-Type': avatarConfig.type
+      }
+    });
   }
 }

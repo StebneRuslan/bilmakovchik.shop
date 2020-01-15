@@ -16,6 +16,7 @@ mongoDB.connection.on('connected', () => {
   const app = express()
 
   app.use('/assets/', express.static(path.resolve(__dirname, '..', 'admin', 'dist', 'admin')))
+  app.use('/public/', express.static(path.resolve(__dirname, 'public')))
   app.use(compression())
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))

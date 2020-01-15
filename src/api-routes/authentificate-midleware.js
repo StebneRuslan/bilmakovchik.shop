@@ -7,7 +7,6 @@ const createError = require('http-errors')
 // authenticate middleware for each request
 passport.use('api-key',
   new CustomStrategy((req, callback) => {
-    console.log(req.headers['x-api-key'])
     User.findOne({ apiKey: req.headers['x-api-key'] })
       .then(user => callback(null, user))
       .catch(callback)
