@@ -15,4 +15,13 @@ const validate = (validator) => (req, res, next) => {
   next()
 }
 
+const validateData = (validator, data) => {
+  if (!validator(data)) {
+    return (new ValidationError(validator.errors))
+  } else {
+    return null
+  }
+}
+
 module.exports.validate = validate
+module.exports.validateData = validateData

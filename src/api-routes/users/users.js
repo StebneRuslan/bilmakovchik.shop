@@ -5,6 +5,7 @@ const authentificate = require('../authentificate-midleware')
 const { create, update } = require('./validator')
 const createError = require('http-errors')
 const FileType = require('file-type')
+const csv = require('csv-parser')
 
 const {
   createUser,
@@ -12,7 +13,8 @@ const {
   getAllUsers,
   updateUser,
   deleteUser,
-  saveAvatar
+  saveAvatar,
+  createUsers
 } = require('../../services/users')
 
 router.post('/users/login', authentificate.local, (req, res, next) => {
@@ -62,6 +64,18 @@ router.delete('/users/:userId', authentificate.apiKey, (req, res, next) => {
   deleteUser(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
+})
+
+router.post('/users/csv', authentificate.apiKey, (req, res, next) => {
+  const users = []
+  req.pipe(csv())
+    .on('data', (data) => users.push(data))
+    .on('end', () => {
+      createUsers(users)
+        .then(data => res.status(200).send(data))
+        .catch(err => next(createError(400, err.message)))
+    })
+    .on('error', (err) => next(createError(400, err.message)))
 })
 
 module.exports = router

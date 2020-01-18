@@ -3,8 +3,17 @@ const path = require('path')
 const User = require('../models/users')
 const File = require('../models/file')
 const pick = require('lodash/pick')
+const partial = require('lodash/partial')
+const has = require('lodash/has')
+const omit = require('lodash/omit')
+const groupBy = require('lodash/groupBy')
+const mapValues = require('lodash/mapValues')
+const every = require('lodash/every')
 const adminFields = ['_id', 'firstName', 'avatar', 'lastName', 'email', 'role']
 const privateFields = ['_id', 'apiKey', 'avatar', 'firstName', 'lastName', 'email', 'role']
+const createUserFields = ['firstName', 'lastName', 'email', 'role', 'password', 'error']
+const { createMulti } = require('../api-routes/users/validator')
+const { validateData } = require('../validators/validate-midleware')
 
 // get user by id
 function getUser (id, login = false) {
@@ -80,9 +89,63 @@ function saveAvatar (userId, buffer, fileName, ext) {
   })
 }
 
+function createResolveObject (validUsers, invalidUsers) {
+  return {
+    savedUsers: validUsers || [],
+    dontSavedUsers: invalidUsers || []
+  }
+}
+
+function createUsers (users) {
+  return new Promise((resolve, reject) => {
+    const processedUsers = groupUsers(createValidUser(users))
+    if (!processedUsers.valid.length) {
+      resolve(createResolveObject(processedUsers.valid, processedUsers.invalid))
+    }
+    Promise.all(processedUsers.valid.map((user, index) => {
+      return new User(user).save()
+        .then(data => data)
+        .catch(err => {
+          processedUsers.invalid.push(user)
+          processedUsers.valid.splice(index, 1)
+          console.error(err.message)
+        })
+    }))
+      .then((result) => resolve(createResolveObject(result.filter(user => !!user).map(user => pick(user, adminFields)),
+        processedUsers.invalid)))
+      .catch(err => reject(err))
+  })
+}
+
+function createValidUser (users) {
+  return users.map(user => {
+    const validationError = validateData(createMulti, users.map(user => {
+      return { user }
+    }))
+    if (validationError) {
+      user.error = validationError
+    }
+    return validationError
+      ? { ...pick(user, createUserFields), type: every(createUserFields, partial(has, user)) ? 'valid' : 'invalid' }
+      : { ...pick(user, createUserFields), type: 'invalid' }
+  })
+}
+
+function groupUsers (users) {
+  const result = mapValues(groupBy(users, 'type'), usersList => usersList.map(user => omit(user, 'type')))
+  if (!result.valid) {
+    result.valid = []
+  }
+  if (!result.invalid) {
+    result.invalid = []
+  }
+  return result
+}
+
 module.exports.getUser = getUser
 module.exports.getAllUsers = getAllUsers
 module.exports.createUser = createUser
 module.exports.updateUser = updateUser
 module.exports.deleteUser = deleteUser
 module.exports.saveAvatar = saveAvatar
+module.exports.createUsers = createUsers

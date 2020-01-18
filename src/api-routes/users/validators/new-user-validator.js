@@ -39,3 +39,4 @@ const userSchema = {
 }
 
 module.exports.validatePost = ajv.compile(userSchema)
+module.exports.newUserSchema = userSchema
