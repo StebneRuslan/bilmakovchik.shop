@@ -65,4 +65,8 @@ export class UsersService {
       }
     });
   }
+
+  public uploadCsvFile(file: File): Observable<any> {
+    return this.http.post(`${this.uri}/users/csv`, file);
+  }
 }

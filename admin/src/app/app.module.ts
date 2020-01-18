@@ -15,6 +15,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatInputModule } from '@angular/material';
 import { MatCardModule } from "@angular/material/card";
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -27,6 +28,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationInterceptor } from "./interceptors/auth.interceptor";
 import { UserComponent } from './components/users/user/user.component';
 import { GraphicComponent } from './components/graphic/graphic.component';
+import { UsersUploaderComponent } from './components/users-uploader/users-uploader.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { GraphicComponent } from './components/graphic/graphic.component';
     LoginComponent,
     RegistrationComponent,
     UserComponent,
-    GraphicComponent
+    GraphicComponent,
+    UsersUploaderComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ import { GraphicComponent } from './components/graphic/graphic.component';
     MatSelectModule,
     MatInputModule,
     MatCardModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    NgxSpinnerModule
   ],
   providers: [
     CookieService,

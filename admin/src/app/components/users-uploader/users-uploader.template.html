@@ -1,0 +1,25 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+<mat-card>
+  <mat-card-header>
+    <div class="upload-container">
+      <h1>Upload users from csv</h1>
+    </div>
+  </mat-card-header>
+  <div class="controls-container">
+    <mat-form-field>
+      <ngx-mat-file-input accept=".csv" placeholder="Required input" (change)="selectFile($event)" required></ngx-mat-file-input>
+      <mat-icon matSuffix>folder</mat-icon>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendFile()">Save</button>
+  </div>
+</mat-card>
+<div>
+  <div id="viz0"></div>
+</div>

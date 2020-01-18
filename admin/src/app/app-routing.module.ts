@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UserComponent } from "./components/users/user/user.component";
 import { GraphicComponent } from "./components/graphic/graphic.component";
+import { UsersUploaderComponent } from "./components/users-uploader/users-uploader.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'user/:id',
     component: UserComponent
+  },
+  {
+    path: 'users-uploader',
+    component: UsersUploaderComponent
   }
 ];
 
