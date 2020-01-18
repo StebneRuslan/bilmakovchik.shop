@@ -11,6 +11,7 @@ import { APP_USER, SUPER_ADMIN } from "../../entities/roles";
 })
 export class UsersUploaderComponent implements OnInit {
   private file: File;
+  public canSend: boolean = false;
   constructor(
     private userService: UsersService,
     private spinner: NgxSpinnerService
@@ -21,7 +22,7 @@ export class UsersUploaderComponent implements OnInit {
 
   public selectFile(event: any): void {
     this.file = event.target.files[0];
-    console.log('qweqweqw', event.target.files[0])
+    this.canSend = !!event.target.files[0]
   }
 
   public sendFile(): void {
@@ -49,7 +50,10 @@ export class UsersUploaderComponent implements OnInit {
           fillWeight: 3.5,
         }
       );
-      this.spinner.hide()
+      this.spinner.hide();
+    }, err => {
+      this.spinner.hide();
+      console.log(err);
     })
   }
 }

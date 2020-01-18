@@ -89,23 +89,19 @@ function saveAvatar (userId, buffer, fileName, ext) {
   })
 }
 
-function createResolveObject (validUsers, invalidUsers) {
-  return {
-    savedUsers: validUsers || [],
-    dontSavedUsers: invalidUsers || []
-  }
-}
-
+// Create users by csv file
 function createUsers (users) {
   return new Promise((resolve, reject) => {
     const processedUsers = groupUsers(createValidUser(users))
     if (!processedUsers.valid.length) {
       resolve(createResolveObject(processedUsers.valid, processedUsers.invalid))
     }
+    // TODO: research insertMany with timestamps and password bcrypt
     Promise.all(processedUsers.valid.map((user, index) => {
       return new User(user).save()
         .then(data => data)
         .catch(err => {
+          user.error = err
           processedUsers.invalid.push(user)
           processedUsers.valid.splice(index, 1)
           console.error(err.message)
@@ -117,6 +113,7 @@ function createUsers (users) {
   })
 }
 
+// create valid objects for saving to db
 function createValidUser (users) {
   return users.map(user => {
     const validationError = validateData(createMulti, users.map(user => {
@@ -131,6 +128,7 @@ function createValidUser (users) {
   })
 }
 
+// group by "valid" field to separate users
 function groupUsers (users) {
   const result = mapValues(groupBy(users, 'type'), usersList => usersList.map(user => omit(user, 'type')))
   if (!result.valid) {
@@ -140,6 +138,14 @@ function groupUsers (users) {
     result.invalid = []
   }
   return result
+}
+
+// create result data
+function createResolveObject (validUsers, invalidUsers) {
+  return {
+    savedUsers: validUsers || [],
+    dontSavedUsers: invalidUsers || []
+  }
 }
 
 module.exports.getUser = getUser

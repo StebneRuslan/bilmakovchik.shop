@@ -17,7 +17,7 @@
       <ngx-mat-file-input accept=".csv" placeholder="Required input" (change)="selectFile($event)" required></ngx-mat-file-input>
       <mat-icon matSuffix>folder</mat-icon>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="sendFile()">Save</button>
+    <button mat-raised-button color="primary" [disabled]="!canSend" (click)="sendFile()">Save</button>
   </div>
 </mat-card>
 <div>

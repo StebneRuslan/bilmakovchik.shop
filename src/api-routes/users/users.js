@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
+const { validateCsvHeader } = require('../csv-midleware')
 const { create, update } = require('./validator')
 const createError = require('http-errors')
 const FileType = require('file-type')
@@ -66,8 +67,9 @@ router.delete('/users/:userId', authentificate.apiKey, (req, res, next) => {
     .catch(err => next(createError(400, err.message)))
 })
 
-router.post('/users/csv', authentificate.apiKey, (req, res, next) => {
+router.post('/users/csv', authentificate.apiKey, validateCsvHeader, (req, res, next) => {
   const users = []
+  // Parsing buffer to valid csv object
   req.pipe(csv())
     .on('data', (data) => users.push(data))
     .on('end', () => {
