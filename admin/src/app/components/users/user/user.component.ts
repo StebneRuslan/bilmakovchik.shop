@@ -43,6 +43,7 @@ export class UserComponent implements OnInit {
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(({id}) => {
       this.usersService.getOneUser(id).subscribe((user: User) => {
+        debugger;
         this.form.formGroup.patchValue(user);
         if (user.avatar) {
           this.avatar = new Avatar(user.avatar.name, user.avatar.path, user.avatar.type);

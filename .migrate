@@ -3,7 +3,7 @@
   "migrations": [
     {
       "title": "1579119342793-add-user-avatar.js",
-      "timestamp": 1579120098970
+      "timestamp": 1579195193826
     }
   ]
 }

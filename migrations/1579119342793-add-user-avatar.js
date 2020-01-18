@@ -10,24 +10,26 @@ module.exports.up = function (next) {
     useCreateIndex: true,
     useUnifiedTopology: true
   }).then(db => {
-    console.log('dddddd', db)
-    new User().save()
-    // User.findOneAndUpdate({ _id: '5e03a5cc8c3b8034cb244943' }, { avatar: '' })
-    // User.findById('5e03a5cc8c3b8034cb244943')
-      .then((story) => {
-        story.avatar = ''
-        story.save().then(() => {
-          db.disconnect()
-          // return next()
-        }).catch(err => {
-          console.log(err)
-          // db.disconnect()
-          next(err)
-        })
+    User.update({}, { avatar: null }, { multi: true })
+      .then(() => {
+        db.disconnect()
+        return next()
       })
+      .catch(err => next(err))
   })
 }
 
 module.exports.down = function (next) {
-  next()
+  mongoose.connect(`${dbConfig.URI}`, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  }).then(db => {
+    User.update({}, { avatar: null }, { multi: true })
+      .then(() => {
+        db.disconnect()
+        return next()
+      })
+      .catch(err => next(err))
+  })
 }
