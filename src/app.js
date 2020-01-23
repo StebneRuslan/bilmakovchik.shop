@@ -12,9 +12,9 @@ const compression = require('compression')
 const apiV1 = require('./api-routes/api-v1')
 const adminRoutes = require('./routes/admin-routes')
 
-mongoDB.connection.on('connected', () => {
-  const app = express()
+const app = express()
 
+mongoDB.connection.on('connected', () => {
   app.use('/assets/', express.static(path.resolve(__dirname, '..', 'admin', 'dist', 'admin')))
   app.use('/public/', express.static(path.resolve(__dirname, 'public')))
   app.use(compression())
@@ -44,3 +44,5 @@ mongoDB.connection.on('connected', () => {
     console.log('***********************************************')
   })
 })
+
+module.exports = app

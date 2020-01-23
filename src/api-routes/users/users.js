@@ -3,10 +3,15 @@ const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
 const { validateCsvHeader } = require('../csv-midleware')
-const { create, update } = require('./validator')
+const { createUserSchema } = require('./validators/user-validator')
 const createError = require('http-errors')
 const FileType = require('file-type')
 const csv = require('csv-parser')
+const { userModel, newUserRequiredFields } = require('./validators/user-model')
+const ajv = require('ajv')()
+
+const create = ajv.compile(createUserSchema(userModel, false, newUserRequiredFields))
+const update = ajv.compile(createUserSchema(userModel, false, []))
 
 const {
   createUser,
@@ -30,7 +35,7 @@ router.get('/users/:userId', authentificate.apiKey, (req, res, next) => {
     .catch(err => next(createError(400, err.message)))
 })
 
-router.get('/users', authentificate.apiKey, (req, res, next) => {
+router.get('/users', (req, res, next) => {
   getAllUsers()
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
