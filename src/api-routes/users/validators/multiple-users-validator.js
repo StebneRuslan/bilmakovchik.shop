@@ -1,8 +1,8 @@
 const ajv = require('ajv')()
-const { createUserSchema } = require('./user-validator')
+const { createSchema } = require('../../schemas-generator')
 const { userModel, newUserRequiredFields } = require('./user-model')
 
-const userSchema = createUserSchema(userModel, false, newUserRequiredFields)
+const userSchema = createSchema('user', userModel, false, newUserRequiredFields)
 
 const usersSchema = {
   type: 'array',

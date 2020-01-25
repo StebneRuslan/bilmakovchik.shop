@@ -29,6 +29,8 @@ import { AuthenticationInterceptor } from "./interceptors/auth.interceptor";
 import { UserComponent } from './components/users/user/user.component';
 import { GraphicComponent } from './components/graphic/graphic.component';
 import { UsersUploaderComponent } from './components/users-uploader/users-uploader.component';
+import { FilesComponent } from './components/files/files.component';
+import { FileComponent } from './components/files/file/file.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { UsersUploaderComponent } from './components/users-uploader/users-upload
     RegistrationComponent,
     UserComponent,
     GraphicComponent,
-    UsersUploaderComponent
+    UsersUploaderComponent,
+    FilesComponent,
+    FileComponent
   ],
   imports: [
     BrowserModule,
