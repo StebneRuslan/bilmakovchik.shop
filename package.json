@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha ./src/tests/**/*.test.js --exit",
     "start:dev": "nodemon ./src/app.js",
     "create-user": "node ./src/scripts/add-user.js",
     "standard": "standard"
@@ -14,19 +14,37 @@
   "dependencies": {
     "ajv": "^6.10.2",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
+    "csv-parser": "^2.3.2",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-router": "0.0.1",
+    "faker": "^4.1.0",
+    "file-type": "^13.1.0",
     "http-errors": "^1.7.3",
     "inquirer": "^7.0.0",
     "lodash": "^4.17.15",
+    "migrate": "^1.6.2",
+    "mocha": "^7.0.0",
     "mongoose": "^5.8.1",
     "mongoose-bcrypt": "^1.6.0",
     "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-custom": "^1.1.0",
+    "passport-local": "^1.0.0",
+    "sinon": "^8.1.1",
+    "spy": "^1.0.0",
     "standard": "^14.3.1",
     "uuid": "^3.3.3"
+  },
+  "standard": {
+    "ignore": [
+      "/src/public/",
+      "/node_modules",
+      "/admin"
+    ]
   }
 }

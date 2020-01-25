@@ -1,0 +1,11 @@
+.user-container {
+  width: 35%;
+  margin: auto;
+  img {
+    width: 100%;
+  }
+  .user-form {
+    flex-direction: column;
+    display: flex;
+  }
+}

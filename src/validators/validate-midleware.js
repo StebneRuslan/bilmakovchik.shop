@@ -1,3 +1,4 @@
+// create ajv error
 class ValidationError extends Error {
   constructor (errors, status = 400, message = 'Invalid data') {
     super(message)
@@ -14,4 +15,13 @@ const validate = (validator) => (req, res, next) => {
   next()
 }
 
+const validateData = (validator, data) => {
+  if (!validator(data)) {
+    return (new ValidationError(validator.errors))
+  } else {
+    return null
+  }
+}
+
 module.exports.validate = validate
+module.exports.validateData = validateData

@@ -1,47 +1,88 @@
-//
 const express = require('express')
 const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
-const { create, update } = require('./validator')
+const { validateCsvHeader } = require('../csv-midleware')
+const { createUserSchema } = require('./validators/user-validator')
 const createError = require('http-errors')
+const FileType = require('file-type')
+const csv = require('csv-parser')
+const { userModel, newUserRequiredFields } = require('./validators/user-model')
+const ajv = require('ajv')()
+
+const create = ajv.compile(createUserSchema(userModel, false, newUserRequiredFields))
+const update = ajv.compile(createUserSchema(userModel, false, []))
 
 const {
   createUser,
   getUser,
   getAllUsers,
   updateUser,
-  deleteUser
+  deleteUser,
+  saveAvatar,
+  createUsers
 } = require('../../services/users')
 
-router.get('/users/:userId', authentificate, (req, res, next) => {
-  getUser(req.user)
+router.post('/users/login', authentificate.local, (req, res, next) => {
+  getUser(req.user, true)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.get('/users', authentificate, (req, res, next) => {
+router.get('/users/:userId', authentificate.apiKey, (req, res, next) => {
+  getUser(req.params.userId)
+    .then(data => res.status(200).send(data))
+    .catch(err => next(createError(400, err.message)))
+})
+
+router.get('/users', (req, res, next) => {
   getAllUsers()
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.post('/users', authentificate, validate(create), (req, res, next) => {
+router.post('/users', authentificate.apiKey, validate(create), (req, res, next) => {
   createUser(req.body.user)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.put('/users/:userId', authentificate, validate(update), (req, res, next) => {
+router.put('/users/:userId', authentificate.apiKey, validate(update), (req, res, next) => {
   updateUser(req.body.user, req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
 })
 
-router.delete('/users/:userId', authentificate, (req, res, next) => {
+router.post('/users/:userId/avatar', authentificate.apiKey, (req, res, next) => {
+  const chunks = []
+  req.on('data', (chunk) => chunks.push(chunk))
+  req.on('end', () => {
+    const fileBuffer = Buffer.concat(chunks)
+    FileType.fromBuffer(fileBuffer).then(file => {
+      saveAvatar(req.params.userId, fileBuffer, req.headers['x-file-name'], file.ext)
+        .then(data => res.status(200).send(data))
+        .catch(err => next(createError(400, err.message)))
+    })
+  })
+})
+
+router.delete('/users/:userId', authentificate.apiKey, (req, res, next) => {
   deleteUser(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))
+})
+
+router.post('/users/csv', authentificate.apiKey, validateCsvHeader, (req, res, next) => {
+  const users = []
+  // Parsing buffer to valid csv object
+  req.pipe(csv())
+    .on('data', (data) => users.push(data))
+    .on('end', () => {
+      createUsers(users)
+        .then(data => res.status(200).send(data))
+        .catch(err => next(createError(400, err.message)))
+    })
+    .on('error', (err) => next(createError(400, err.message)))
 })
 
 module.exports = router

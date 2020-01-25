@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-header>
+    <div class="registration-container">
+      <h1>Create account</h1>
+      <form class="registration-form" [formGroup]="form.formGroup">
+        <mat-form-field>
+          <input matInput placeholder="First Name" formControlName="firstName">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Last Name" formControlName="lastName">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Password" formControlName="password">
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="form.formGroup.invalid" (click)="createUser()">Create account</button>
+      </form>
+    </div>
+  </mat-card-header>
+</mat-card>
