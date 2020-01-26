@@ -75,16 +75,16 @@ function saveAvatar (userId, buffer, fileName, ext) {
       if (err) {
         return reject(err)
       }
-      // new File({ name: fileName, path: `/public/avatars/${fileName}`, type: ext, user: userId })
-      //   .save()
-      //   .then(file => {
-      //     User.findOneAndUpdate({ _id: userId }, { avatar: file._id })
-      //       .then(() => {
-      //         return resolve(pick(file, ['name', 'path', 'type']))
-      //       })
-      //       .catch(err => reject(err))
-      //   })
-      //   .catch(err => reject(err))
+      new File({ name: fileName, path: `/public/avatars/${fileName}`, type: ext, user: userId })
+        .save()
+        .then(file => {
+          User.findOneAndUpdate({ _id: userId }, { avatar: file._id })
+            .then(() => {
+              return resolve(pick(file, ['name', 'path', 'type']))
+            })
+            .catch(err => reject(err))
+        })
+        .catch(err => reject(err))
     })
   })
 }

@@ -1,23 +1,61 @@
 const File = require('../models/file')
+const User = require('../models/users')
 const pick = require('lodash/pick')
 const fs = require('fs')
 const path = require('path')
+const axios = require('axios')
+const FileType = require('file-type')
+const { COMPRESS_VIDEO_URL } = require('../config/server')
 
 const publicFileFields = ['path', 'name', 'type']
 
-function createFile (userId, buffer, fileName, ext) {
+function createFile (userId, buffer, fileName) {
   return new Promise((resolve, reject) => {
-    const filePath = path.resolve(__dirname, `../public/avatars/${fileName}`)
+    const filePath = path.resolve(__dirname, `../public/media/${fileName}`)
     fs.writeFile(filePath, buffer, (err) => {
       if (err) {
         return reject(err)
       }
-      const file = new File({ name: fileName, path: `/public/files/${fileName}`, type: ext, user: userId })
-      file.save()
-        .then(() => resolve(pick(file, publicFileFields)))
+      axios.put(`${COMPRESS_VIDEO_URL}/convert`, { path: path.resolve(__dirname, `../public/media/${fileName}`) })
+        .then((res) => {
+          const newFileName = fileName.replace(path.parse(fileName).ext, '.avi')
+          fs.readFile(res.data.path, (err, data) => {
+            if (err) {
+              return reject(err)
+            }
+            FileType.fromBuffer(data).then(fileData => {
+              const newFile = new File({ name: newFileName, path: `/public/media/${newFileName}`, type: fileData.ext, user: userId })
+              newFile.save()
+                .then((file) => {
+                  fs.unlink(filePath, async (err) => {
+                    if (err) {
+                      return reject(err)
+                    }
+                    await updateUserFiles(userId, file._id)
+                    return resolve(pick(file, publicFileFields))
+                  })
+                })
+                .catch(err => reject(err))
+            })
+          })
+        })
         .catch(err => reject(err))
     })
   })
 }
 
-module.exports.createFile = createFile()
+function updateUserFiles (userId, fileId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId)
+      .then(user => {
+        user.files.push(fileId)
+        user.save()
+          .then((user) => {
+            return resolve(user)
+          })
+      })
+      .catch(err => reject(err))
+  })
+}
+
+module.exports.createFile = createFile
