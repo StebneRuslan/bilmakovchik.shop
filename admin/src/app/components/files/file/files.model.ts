@@ -1,10 +1,10 @@
 export class FilesModel {
 	constructor(fileName: string, filePath: string, fileType: string) {
-		this.fileName = fileName;
-		this.filePath = filePath;
-		this.fileType = fileType;
+		this.name = fileName;
+		this.path = filePath;
+		this.type = fileType;
 	}
-	public fileName: string = '';
-	public filePath: string = '';
-	public fileType: string = '';
+	public name: string = '';
+	public path: string = '';
+	public type: string = '';
 }

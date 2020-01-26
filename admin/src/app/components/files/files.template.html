@@ -16,11 +16,13 @@
     <div class="files-container">
         <div class="file-view-container">
             <div class="files-list-container">
-                <div class="file-list"></div>
-                <app-file></app-file>
+                <div class="file" *ngFor="let file of files">
+<!--                  <app-file></app-file>-->
+                  <h3>{{file.name}}</h3>
+                </div>
             </div>
             <div class="files-view"></div>
         </div>
     </div>
-    <p>file works!</p>
+<!--    <p>file works!</p>-->
 </mat-card>

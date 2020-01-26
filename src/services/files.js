@@ -9,6 +9,14 @@ const { COMPRESS_VIDEO_URL } = require('../config/server')
 
 const publicFileFields = ['path', 'name', 'type']
 
+function geUserFiles (userId) {
+  return new Promise((resolve, reject) => {
+    File.find({ author: userId })
+      .then(users => resolve(users.map(user => pick(user, publicFileFields))))
+      .catch(err => reject(err))
+  })
+}
+
 function createFile (userId, buffer, fileName) {
   return new Promise((resolve, reject) => {
     const filePath = path.resolve(__dirname, `../public/media/${fileName}`)
@@ -19,6 +27,7 @@ function createFile (userId, buffer, fileName) {
       axios.put(`${COMPRESS_VIDEO_URL}/convert`, { path: path.resolve(__dirname, `../public/media/${fileName}`) })
         .then((res) => {
           const newFileName = fileName.replace(path.parse(fileName).ext, '.avi')
+          console.log('444444', newFileName)
           fs.readFile(res.data.path, (err, data) => {
             if (err) {
               return reject(err)
@@ -59,3 +68,5 @@ function updateUserFiles (userId, fileId) {
 }
 
 module.exports.createFile = createFile
+module.exports.geUserFiles = geUserFiles
+module.exports.publicFileFields = publicFileFields

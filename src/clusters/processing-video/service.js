@@ -14,7 +14,10 @@ function convertVideo (source) {
           return reject(err)
         }
       })
-      .on('error', (err) => reject(err))
+      .on('error', (err) => {
+        console.error('file convert error', err)
+        return reject(err)
+      })
       .on('end', () => {
         console.log('file has been converted succesfully')
         return resolve(newPath)

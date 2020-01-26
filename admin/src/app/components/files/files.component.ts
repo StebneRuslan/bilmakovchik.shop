@@ -15,22 +15,25 @@ export class FilesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.fileService.getUserFiles().subscribe(
+      files => {
+        this.files = files;
+      },
+      error => {
+        console.error('get user files error', error)
+      }
+    )
   }
 
   public uploadFile(): void {
     this.fileService.sendFile(this.activeFile)
       .subscribe(
-        (data: FilesModel) => {
-        debugger;
-      }, err => {
-          console.log(err)
-        })
+        (data: FilesModel) =>  this.files.push(data),
+        err =>  console.log(err))
   }
-  
+
   public selectFile(event): void {
     const selectedFile = event.target.files[0];
-    this.activeFile = new FilesModel(selectedFile, selectedFile.name, selectedFile.type)
-    console.log(event.target.files[0])
-    debugger;
+    this.activeFile = new FilesModel(selectedFile.name, selectedFile, selectedFile.type)
   }
 }
