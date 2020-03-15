@@ -13,11 +13,10 @@ const fileSchema = new mongoose.Schema({
   },
   path: {
     type: String,
-    unique: true,
     required: true
   },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
-const User = mongoose.model('File', fileSchema)
-module.exports = User
+const File = mongoose.model('File', fileSchema)
+module.exports = File

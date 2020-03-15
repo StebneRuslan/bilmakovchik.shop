@@ -9,7 +9,7 @@ import { LoginModel } from '../../components/login/login.model';
 
 import { Observable, of } from "rxjs";
 import { CookieService } from 'ngx-cookie-service';
-import {FileInput} from "ngx-material-file-input";
+import { FileInput } from "ngx-material-file-input";
 
 @Injectable({
   providedIn: 'root'

@@ -9,7 +9,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   constructor(private userService: UsersService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler) : Observable<HttpEvent<any>> {
-    if (!request.url.includes('login') && !request.url.includes('registration')) {
+    if (!request.url.includes('users') && request.method !== 'POST') {
       request = request.clone({
         headers: request.headers.set('x-api-key', this.userService.getActiveUser(['apiKey']).apiKey)
       });

@@ -9,8 +9,9 @@ const omit = require('lodash/omit')
 const groupBy = require('lodash/groupBy')
 const mapValues = require('lodash/mapValues')
 const every = require('lodash/every')
-const adminFields = ['_id', 'firstName', 'avatar', 'lastName', 'email', 'role']
-const privateFields = ['_id', 'apiKey', 'avatar', 'firstName', 'lastName', 'email', 'role']
+const { publicFileFields } = require('./files')
+const adminFields = ['_id', 'firstName', 'files', 'avatar', 'lastName', 'email', 'role']
+const privateFields = ['_id', 'apiKey', 'files', 'avatar', 'firstName', 'lastName', 'email', 'role']
 const createUserFields = ['firstName', 'lastName', 'email', 'role', 'password', 'error']
 const { createMulti } = require('../api-routes/users/validator')
 const { validateData } = require('../validators/validate-midleware')
@@ -31,7 +32,11 @@ function getUser (id, login = false) {
 function getAllUsers () {
   return new Promise((resolve, reject) => {
     User.find({})
-      .then(data => resolve(data.map(user => pick(user, adminFields))))
+      .populate('files')
+      .then(data => resolve(data.map(user => {
+        user.files = user.files.map(file => pick(file, publicFileFields))
+        return pick(user, adminFields)
+      })))
       .catch(err => reject(err))
   })
 }

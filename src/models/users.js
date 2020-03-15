@@ -43,7 +43,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: ROLE_APP_USER
   },
-  avatar: { type: mongoose.Schema.Types.ObjectId, ref: 'File' }
+  avatar: { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
+  files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }]
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
 // crypt user password

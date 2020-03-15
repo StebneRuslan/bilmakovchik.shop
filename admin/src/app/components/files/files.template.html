@@ -1,0 +1,28 @@
+<mat-card>
+    <mat-card-header class="upload-header-container">
+        <div class="upload-header-container-title">
+            <h1>Select video file</h1>
+        </div>
+        <div class="file-uploader-container-body">
+            <div class="file-input">
+                <mat-form-field>
+                    <ngx-mat-file-input accept=".mp4, .avi" (change)="selectFile($event)" placeholder="Required input" required></ngx-mat-file-input>
+                    <mat-icon matSuffix>folder</mat-icon>
+                </mat-form-field>
+                <button class="send-btn" mat-raised-button color="primary" (click)="uploadFile()">Save</button>
+            </div>
+        </div>
+    </mat-card-header>
+    <div class="files-container">
+        <div class="file-view-container">
+            <div class="files-list-container">
+                <div class="file" *ngFor="let file of files">
+<!--                  <app-file></app-file>-->
+                  <h3>{{file.name}}</h3>
+                </div>
+            </div>
+            <div class="files-view"></div>
+        </div>
+    </div>
+<!--    <p>file works!</p>-->
+</mat-card>

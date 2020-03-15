@@ -3,15 +3,15 @@ const router = express.Router()
 const { validate } = require('../../validators/validate-midleware')
 const authentificate = require('../authentificate-midleware')
 const { validateCsvHeader } = require('../csv-midleware')
-const { createUserSchema } = require('./validators/user-validator')
+const { createSchema } = require('../schemas-generator')
 const createError = require('http-errors')
 const FileType = require('file-type')
 const csv = require('csv-parser')
 const { userModel, newUserRequiredFields } = require('./validators/user-model')
 const ajv = require('ajv')()
 
-const create = ajv.compile(createUserSchema(userModel, false, newUserRequiredFields))
-const update = ajv.compile(createUserSchema(userModel, false, []))
+const create = ajv.compile(createSchema('user', userModel, false, newUserRequiredFields))
+const update = ajv.compile(createSchema('user', userModel, false, []))
 
 const {
   createUser,
@@ -41,7 +41,7 @@ router.get('/users', (req, res, next) => {
     .catch(err => next(createError(400, err.message)))
 })
 
-router.post('/users', authentificate.apiKey, validate(create), (req, res, next) => {
+router.post('/users', validate(create), (req, res, next) => {
   createUser(req.body.user)
     .then(data => res.status(200).send(data))
     .catch(err => next(createError(400, err.message)))

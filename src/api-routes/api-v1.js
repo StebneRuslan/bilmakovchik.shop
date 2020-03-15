@@ -6,5 +6,6 @@ router.get('/', (req, res) => {
 })
 
 const user = require('./users/users')
+const file = require('./file/file')
 
-module.exports = [router, user]
+module.exports = [router, user, file]
