@@ -3,6 +3,8 @@
 const mongoose = require('mongoose')
 const dbConfig = require('../config/mongo')
 
+console.log('@@@@@@@@@@@@@@@@@@@@@@@',  process.env.MONGO_URL )
+console.log('@@@@@@@@@@@@@@@@@@@@@@@', `${dbConfig.URI}`)
 mongoose.connect(`${dbConfig.URI}`, {
   useNewUrlParser: dbConfig.useNewUrlParser,
   useCreateIndex: dbConfig.useCreateIndex,
