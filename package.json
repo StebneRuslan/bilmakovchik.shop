@@ -23,7 +23,7 @@
     "express": "^4.17.1",
     "express-router": "0.0.1",
     "faker": "^4.1.0",
-    "file-type": "^13.1.0",
+    "file-type": "^16.5.4",
     "http-errors": "^1.7.3",
     "inquirer": "^7.0.0",
     "lodash": "^4.17.15",
